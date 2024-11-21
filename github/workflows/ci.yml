@@ -1,0 +1,45 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main  # main 브랜치에 푸시 시 실행됩니다.
+  pull_request:
+    branches:
+      - main  # main 브랜치로의 PR 시에도 실행됩니다.
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # GitHub에서 제공하는 최신 Ubuntu 환경에서 실행됩니다.
+
+    steps:
+    # 1. Checkout 리포지토리
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # 2. Node.js 세팅
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'  # 원하는 Node.js 버전 설정
+
+    # 3. 의존성 설치
+    - name: Install dependencies
+      run: |
+        npm install
+
+    # 4. 테스트 실행
+    - name: Run tests
+      run: |
+        npm test  # 테스트 명령어가 있다면 실행
+
+    # 5. 빌드 실행
+    - name: Build
+      run: |
+        npm run build  # 빌드 명령어가 있다면 실행
+
+    # 6. 배포 단계 (예: Sentry에 소스 맵 업로드 등)
+    - name: Deploy to Sentry
+      run: |
+        # 배포 또는 소스 맵 업로드 명령어
+        npm run deploy  # 배포 명령어 (배포 스크립트가 있다면 실행)
